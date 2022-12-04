@@ -1,12 +1,12 @@
+use itertools::Itertools;
+
 fn parse(s: &str) -> ((u32, u32), (u32, u32))
 {
-    let mut it = s.split(",")
+    s.split(",")
         .map(|r| {
-            let mut it = r.split("-").map(|i| i.parse::<u32>().unwrap()).into_iter();
-            (it.next().unwrap(), it.next().unwrap())
+            r.split("-").map(|i| i.parse::<u32>().unwrap()).collect_tuple::<(_, _)>().unwrap()
         })
-        .into_iter();
-    (it.next().unwrap(), it.next().unwrap())
+        .collect_tuple::<(_, _)>().unwrap()
 }
 
 fn overlap(i1: &(u32, u32), i2: &(u32, u32)) -> u32
@@ -22,10 +22,9 @@ fn overlap(i1: &(u32, u32), i2: &(u32, u32)) -> u32
 
 fn main() {
     println!("{:?}",
-        include_str!("../input.txt")
+        include_str!("../input0.txt")
             .lines()
             .map(parse)
             .filter(|(i1, i2)| overlap(i1, i2) > 0)
-            .collect::<Vec<_>>()
-            .len());
+            .count());
 }
